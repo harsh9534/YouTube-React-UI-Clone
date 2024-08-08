@@ -2,6 +2,7 @@ import React from "react";
 import UserLogo from "../utils/download.png";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
+import { Link } from "react-router-dom";
 const Head = () => {
   const dispatch = useDispatch();
   const toggleMenuHandler = () => {
@@ -16,6 +17,7 @@ const Head = () => {
           alt="menu"
           src="https://cdn.iconscout.com/icon/free/png-512/free-hamburger-menu-462145.png?f=webp&w=512"
         ></img>
+
         <img
           className="h-11 ml-3 "
           alt="yt-logo"
