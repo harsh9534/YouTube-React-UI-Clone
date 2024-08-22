@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from "react";
 import UserLogo from "../utils/download.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 
 import { SUGG_API } from "../utils/constants";
 import SuggList from "./SuggList";
+import store from "../utils/store";
+import { json } from "react-router-dom";
+import { cacheResults } from "../utils/searchSlice";
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggList, setSuggList] = useState([]);
   const [showSugg, setShowSugg] = useState(false);
+
+  const searchCache = useSelector((store) => store.search);
+  const dispatch = useDispatch();
   useEffect(() => {
-    const timer = setTimeout(() => sendSuggestions(), 200);
+    const timer = setTimeout(() => {
+      if (searchCache[searchQuery]) {
+        setSuggList(searchCache[searchQuery]);
+      } else {
+        sendSuggestions();
+      }
+    }, 200);
     return () => {
       clearTimeout(timer);
     };
@@ -20,10 +32,15 @@ const Head = () => {
     const data = await fetch(SUGG_API + searchQuery);
     const json = await data.json();
     setSuggList(json[1]);
-    console.log(suggList);
+    // console.log(suggList);
+    //update cache
+    dispatch(
+      cacheResults({
+        [searchQuery]: json[1],
+      })
+    );
   };
 
-  const dispatch = useDispatch();
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
