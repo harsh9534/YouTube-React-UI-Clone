@@ -18,8 +18,8 @@ const list = [
 const ButtonList = () => {
   return (
     <div className="flex mt-2">
-      {list.map((item) => (
-        <Button name={item} />
+      {list.map((item, i) => (
+        <Button name={item} key={i} />
       ))}
     </div>
   );
